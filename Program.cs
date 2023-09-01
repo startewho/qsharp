@@ -1,8 +1,9 @@
 ﻿
+using QuickJs;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using QuickJs;
+using static QuickJs.NativeMethods;
 
 namespace QSharp
 {
@@ -12,12 +13,12 @@ namespace QSharp
         {
             //Console.OutputEncoding = Encoding.UTF8;
 
-            JSRuntime* runtime = NativeMethods.JS_NewRuntime();
+            JSRuntime* runtime = JS_NewRuntime();
             if (runtime != null)
             {
+
                 SetDefaultModuleLoader(runtime);
                 NativeMethods.js_std_init_handlers(runtime);
-
                 JSContext* ctx = NativeMethods.JS_NewContext(runtime);
                 if (ctx != null)
                 {
@@ -46,6 +47,8 @@ namespace QSharp
                     {
                         NativeMethods.js_init_module_std(ctx, buffer);
                     }
+
+                    HelloModule.Init(ctx, "hello");
 
                     var filename = "<anonymous>"u8;
                     var input = "function add(a,b){return a+b}; let c=add(1,2);console.log(c);"u8;

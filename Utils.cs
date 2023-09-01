@@ -39,7 +39,7 @@ namespace QSharp
             return argv;
         }
 
-        internal static void ReleaseArgv(IntPtr argv)
+        internal static void ReleaseArgv(nint argv)
         {
             Marshal.FreeHGlobal(argv);
         }

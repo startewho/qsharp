@@ -6,10 +6,11 @@
 #pragma warning disable CS8981
 using System;
 using System.Runtime.InteropServices;
-
+using GroupedNativeMethodsGenerator;
 
 namespace QuickJs
 {
+    [GroupedNativeMethods()]
     internal static unsafe partial class NativeMethods
     {
         const string __DllName = "quickjs";

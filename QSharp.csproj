@@ -11,10 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="csbindgen" Version="1.7.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="quickjs.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Test\hello.js">
+    <None Update="Test\math.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Test\test.js">
