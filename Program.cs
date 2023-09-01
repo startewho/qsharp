@@ -36,39 +36,43 @@ namespace QSharp
 
                     JSMemoryUsage usage = new JSMemoryUsage();
                     NativeMethods.JS_ComputeMemoryUsage(runtime, &usage);
-                    var buffBytes = Utils.StringToManagedUTF8("os");
-                    fixed (byte* buffer = buffBytes)
+
+                    fixed (byte* buffer = "os"u8)
                     {
                         NativeMethods.js_init_module_os(ctx, buffer);
                     }
-                    buffBytes = Utils.StringToManagedUTF8("std");
-                    fixed (byte* buffer = buffBytes)
+
+                    fixed (byte* buffer = "std"u8)
                     {
                         NativeMethods.js_init_module_std(ctx, buffer);
                     }
 
-                    var filename = "<anonymous>";
-                    var input = "function add(a,b){return a+b}; let c=add(1,2);console.log(c);";
-                    var length = Encoding.UTF8.GetByteCount(input);
+                    var filename = "<anonymous>"u8;
+                    var input = "function add(a,b){return a+b}; let c=add(1,2);console.log(c);"u8;
 
-                    //JSValue val = NativeMethods.JS_Eval(ctx, input, (uint)length, filename, 1);
-                    //if (val.tag!=2)
-                    //{
-                    //    val = NativeMethods.JS_GetException(ctx);
-                    //    var name=  GetStringProperty(ctx,val, "name");
-                    //    var msg = GetStringProperty(ctx, val, "message");
-                    //    var stack= GetStringProperty(ctx, val, "stack");
-                    //}
-                    var input2 = File.ReadAllText("Test/test.js");
-                    filename = "Test/test.js";
-                    buffBytes = Utils.StringToManagedUTF8(input2);
-                    var nameBytes = Utils.StringToManagedUTF8(filename);
-                    var length2 = Encoding.UTF8.GetByteCount(input2);
-
-                    fixed (byte* buffer = buffBytes)
-                    fixed (byte* pfile = nameBytes)
+                    fixed (byte* buffer = input)
                     {
-                        var val = NativeMethods.JS_Eval(ctx, buffer, (nuint)length2, pfile, 1);
+                        fixed (byte* file = filename)
+                        {
+                            JSValue val = NativeMethods.JS_Eval(ctx, buffer, (nuint)input.Length, file, 0);
+                            if (val.tag != 2)
+                            {
+                                val = NativeMethods.JS_GetException(ctx);
+                                var name = GetStringProperty(ctx, val, "name");
+                                var msg = GetStringProperty(ctx, val, "message");
+                                var stack = GetStringProperty(ctx, val, "stack");
+                            }
+                        }
+
+                    }
+
+                    var input2 = File.ReadAllBytes("Test/test.js");//UTF8编码
+                    filename = "Test/test.js"u8;
+
+                    fixed (byte* buffer = input2)
+                    fixed (byte* pfile = filename)
+                    {
+                        var val = NativeMethods.JS_Eval(ctx, buffer, (nuint)input2.Length, pfile, 1);
                         if (val.tag != 2)
                         {
                             val = NativeMethods.JS_GetException(ctx);
