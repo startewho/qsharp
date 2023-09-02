@@ -27,7 +27,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // csbindgen code, generate both rust ffi and C# dll import
     csbindgen::Builder::default()
-        .input_bindgen_file("src/quickjs.rs") // read from bindgen generated code
+        .input_bindgen_file("src/quickjs.rs")
+        .method_filter(|x| {
+            let mut m=false;
+            if x.starts_with("_"){if x.starts_with("__JS"){m=true;}}else{m=true; } return m;}) // don't filter __JS
         .rust_file_header("use super::quickjs::*;") // import bindgen generated modules(struct/method)
         .csharp_dll_name("quickjs")
         .csharp_class_accessibility("public")

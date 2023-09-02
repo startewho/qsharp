@@ -1087,6 +1087,12 @@ namespace QuickJs
         [DllImport(__DllName, EntryPoint = "csbindgen_JS_ThrowOutOfMemory", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern JSValue JS_ThrowOutOfMemory(JSContext* ctx);
 
+        [DllImport(__DllName, EntryPoint = "csbindgen___JS_FreeValue", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void __JS_FreeValue(JSContext* ctx, JSValue v);
+
+        [DllImport(__DllName, EntryPoint = "csbindgen___JS_FreeValueRT", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void __JS_FreeValueRT(JSRuntime* rt, JSValue v);
+
         [DllImport(__DllName, EntryPoint = "csbindgen_JS_ToBool", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int JS_ToBool(JSContext* ctx, JSValue val);
 

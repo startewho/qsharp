@@ -4109,6 +4109,30 @@ pub unsafe extern "C" fn csbindgen_JS_ThrowOutOfMemory(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn csbindgen___JS_FreeValue(
+    ctx: *mut JSContext,
+    v: JSValue
+)
+{
+    __JS_FreeValue(
+        ctx,
+        v
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn csbindgen___JS_FreeValueRT(
+    rt: *mut JSRuntime,
+    v: JSValue
+)
+{
+    __JS_FreeValueRT(
+        rt,
+        v
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn csbindgen_JS_ToBool(
     ctx: *mut JSContext,
     val: JSValue

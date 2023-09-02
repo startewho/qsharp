@@ -24,9 +24,7 @@ namespace QuickJs
                 JSRefCountHeader* p = (JSRefCountHeader*)v.u.ptr;
                 if (--p->ref_count <= 0)
                 {
-
-                    //Todo Add Free Func
-                    //JS_FreeValue(ctx, v);
+                    __JS_FreeValue(ctx, v);
                 }
             }
         }
