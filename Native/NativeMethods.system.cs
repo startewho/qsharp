@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace QuickJs
 {
-    internal static unsafe partial class  NativeMethods
+    public static unsafe partial class  NativeMethods
 	{
 		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern IntPtr GetModuleHandle(string lpModuleName);

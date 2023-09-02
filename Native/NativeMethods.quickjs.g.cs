@@ -6,12 +6,11 @@
 #pragma warning disable CS8981
 using System;
 using System.Runtime.InteropServices;
-using GroupedNativeMethodsGenerator;
+
 
 namespace QuickJs
 {
-    [GroupedNativeMethods()]
-    internal static unsafe partial class NativeMethods
+    public static unsafe partial class NativeMethods
     {
         const string __DllName = "quickjs";
 
@@ -1446,46 +1445,46 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct _iobuf
+    public unsafe partial struct _iobuf
     {
         public void* _Placeholder;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct _div_t
+    public unsafe partial struct _div_t
     {
         public int quot;
         public int rem;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct _ldiv_t
+    public unsafe partial struct _ldiv_t
     {
         public CLong quot;
         public CLong rem;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct _lldiv_t
+    public unsafe partial struct _lldiv_t
     {
         public long quot;
         public long rem;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSRuntime
+    public unsafe partial struct JSRuntime
     {
         public fixed byte _unused[1];
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSContext
+    public unsafe partial struct JSContext
     {
         public fixed byte _unused[1];
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal unsafe partial struct JSValueUnion
+    public unsafe partial struct JSValueUnion
     {
         [FieldOffset(0)]
         public int int32;
@@ -1496,14 +1495,14 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSValue
+    public unsafe partial struct JSValue
     {
         public JSValueUnion u;
         public long tag;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSMallocState
+    public unsafe partial struct JSMallocState
     {
         public nuint malloc_count;
         public nuint malloc_size;
@@ -1512,7 +1511,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSMallocFunctions
+    public unsafe partial struct JSMallocFunctions
     {
         public delegate* unmanaged[Cdecl]<JSMallocState*, nuint, void*> js_malloc;
         public delegate* unmanaged[Cdecl]<JSMallocState*, void*, void> js_free;
@@ -1521,13 +1520,13 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSGCObjectHeader
+    public unsafe partial struct JSGCObjectHeader
     {
         public fixed byte _unused[1];
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSMemoryUsage
+    public unsafe partial struct JSMemoryUsage
     {
         public long malloc_size;
         public long malloc_limit;
@@ -1558,14 +1557,14 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSPropertyEnum
+    public unsafe partial struct JSPropertyEnum
     {
         public int is_enumerable;
         public uint atom;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSPropertyDescriptor
+    public unsafe partial struct JSPropertyDescriptor
     {
         public int flags;
         public JSValue value;
@@ -1574,7 +1573,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSClassExoticMethods
+    public unsafe partial struct JSClassExoticMethods
     {
         public delegate* unmanaged[Cdecl]<JSContext*, JSPropertyDescriptor*, JSValue, uint, int> get_own_property;
         public delegate* unmanaged[Cdecl]<JSContext*, JSPropertyEnum**, uint*, JSValue, int> get_own_property_names;
@@ -1586,7 +1585,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSClassDef
+    public unsafe partial struct JSClassDef
     {
         public byte* class_name;
         public delegate* unmanaged[Cdecl]<JSRuntime*, JSValue, void> finalizer;
@@ -1596,7 +1595,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSSharedArrayBufferFunctions
+    public unsafe partial struct JSSharedArrayBufferFunctions
     {
         public delegate* unmanaged[Cdecl]<void*, nuint, void*> sab_alloc;
         public delegate* unmanaged[Cdecl]<void*, void*, void> sab_free;
@@ -1605,13 +1604,13 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSModuleDef
+    public unsafe partial struct JSModuleDef
     {
         public fixed byte _unused[1];
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal unsafe partial struct JSCFunctionType
+    public unsafe partial struct JSCFunctionType
     {
         [FieldOffset(0)]
         public delegate* unmanaged[Cdecl]<JSContext*, JSValue, int, JSValue*, JSValue> generic;
@@ -1640,7 +1639,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSCFunctionListEntry
+    public unsafe partial struct JSCFunctionListEntry
     {
         public byte* name;
         public byte prop_flags;
@@ -1650,7 +1649,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal unsafe partial struct JSCFunctionListEntry__bindgen_ty_1
+    public unsafe partial struct JSCFunctionListEntry__bindgen_ty_1
     {
         [FieldOffset(0)]
         public JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_1 func;
@@ -1671,7 +1670,7 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_1
+    public unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_1
     {
         public byte length;
         public byte cproto;
@@ -1679,21 +1678,21 @@ namespace QuickJs
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_2
+    public unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_2
     {
         public JSCFunctionType get;
         public JSCFunctionType set;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_3
+    public unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_3
     {
         public byte* name;
         public int @base;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_4
+    public unsafe partial struct JSCFunctionListEntry__bindgen_ty_1__bindgen_ty_4
     {
         public JSCFunctionListEntry* tab;
         public int len;

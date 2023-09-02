@@ -30,9 +30,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         .input_bindgen_file("src/quickjs.rs") // read from bindgen generated code
         .rust_file_header("use super::quickjs::*;") // import bindgen generated modules(struct/method)
         .csharp_dll_name("quickjs")
+        .csharp_class_accessibility("public")
         .csharp_namespace("QuickJs") 
         .csharp_entry_point_prefix("csbindgen_")
-        .generate_to_file("src/quickjs_ffi.rs", "../NativeMethods.quickjs.g.cs")
+        .generate_to_file("src/quickjs_ffi.rs", "../Native/NativeMethods.quickjs.g.cs")
         .unwrap();
     Ok(())
 }

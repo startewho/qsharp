@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 
-namespace QSharp
+namespace QuickJs
 {
     /// <summary>
     /// Contains utilities that the QuickJS.NET uses.
