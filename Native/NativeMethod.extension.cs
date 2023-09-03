@@ -43,7 +43,7 @@ namespace QuickJs
         /// Warning: <paramref name="val"/> is freed by the function.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int JS_SetProperty(JSContext* ctx,  JSValue this_obj, JSAtom prop, JSValue val)
+        public static int JS_SetProperty(JSContext* ctx, JSValue this_obj, JSAtom prop, JSValue val)
         {
             return JS_SetPropertyInternal(ctx, this_obj, prop.ToUInt32(), val, (int)JSPropertyFlags.Throw);
         }
@@ -63,5 +63,9 @@ namespace QuickJs
         {
             return JS_GetPropertyInternal(ctx, this_obj, prop.ToUInt32(), this_obj, (int)JSPropertyFlags.Throw);
         }
+
+
+
     }
 }
+

@@ -48,7 +48,7 @@ namespace QSharp
                         NativeMethods.js_init_module_std(ctx, buffer);
                     }
 
-                    HelloModule.Init(ctx, "hello");
+                    HelloModule.Init(ctx);
 
                     var filename = "<anonymous>"u8;
                     var input = "function add(a,b){return a+b}; let c=add(1,2);console.log(c);"u8;
@@ -60,13 +60,9 @@ namespace QSharp
                             JSValue val = NativeMethods.JS_Eval(ctx, buffer, (nuint)input.Length, file, 0);
                             if (val.tag != 2)
                             {
-                                val = NativeMethods.JS_GetException(ctx);
-                                var name = GetStringProperty(ctx, val, "name");
-                                var msg = GetStringProperty(ctx, val, "message");
-                                var stack = GetStringProperty(ctx, val, "stack");
+                                ctx->ThrowPendingException();
                             }
                         }
-
                     }
 
                     var input2 = File.ReadAllBytes("Test/test.js");//UTF8编码
@@ -78,10 +74,7 @@ namespace QSharp
                         var val = NativeMethods.JS_Eval(ctx, buffer, (nuint)input2.Length, pfile, 1);
                         if (val.tag != 2)
                         {
-                            val = NativeMethods.JS_GetException(ctx);
-                            var name = GetStringProperty(ctx, val, "name");
-                            var msg = GetStringProperty(ctx, val, "message");
-                            var stack = GetStringProperty(ctx, val, "stack");
+                            ctx->ThrowPendingException();
                         }
 
                     }
@@ -121,36 +114,7 @@ namespace QSharp
             NativeMethods.JS_SetModuleLoaderFunc(runtime, null, (delegate* unmanaged[Cdecl]<JSContext*, byte*, void*, JSModuleDef*>)fn_js_module_loader, null);
         }
 
-        public static unsafe string GetStringProperty(JSContext* ctx, JSValue value, string name)
-        {
 
-            try
-            {
-                var nameBytes = Utils.StringToManagedUTF8(name);
-                fixed (byte* buffer = nameBytes)
-                {
-                    JSValue val = NativeMethods.JS_GetPropertyStr(ctx, value, buffer);
-                    nuint length;
-                    byte* p = NativeMethods.JS_ToCStringLen2(ctx, &length, val, 1);
-                    if (p == null)
-                        return null;
-                    try
-                    {
-                        return Utils.PtrToStringUTF8(new IntPtr(p), (int)length);
-                    }
-                    finally
-                    {
-                        NativeMethods.JS_FreeCString(ctx, p);
-                    }
-                }
-
-
-            }
-            finally
-            {
-                // NativeMethods.free(ctx, val);
-            }
-        }
 
         private unsafe static void PrintHello(JSContext* ctx)
         {

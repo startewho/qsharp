@@ -10,15 +10,22 @@ using static QuickJs.NativeMethods;
 
 namespace QSharp;
 
-internal class HelloModule
+internal class HelloModule : INativeModule
 {
-    private const int COUNT = 2;
 
-    private static IntPtr funList = IntPtr.Zero;
-    public unsafe static JSModuleDef* Init(JSContext* context, string name)
+    private static IntPtr PFunList = IntPtr.Zero;
+
+    public unsafe static List<JSCFunctionListEntry> FunctionList => new List<JSCFunctionListEntry>() {
+        JSCFunctionListEntry.CreateFuction(new JSCFunctionType(){generic=&Add},nameof(Add),2),
+        JSCFunctionListEntry.CreateFuction(new JSCFunctionType(){generic=&Sub},nameof(Sub),2),
+    };
+
+    public static string Name => "hello";
+
+    public unsafe static JSModuleDef* Init(JSContext* context)
     {
         var r = 0;
-        var nameStr = Encoding.UTF8.GetBytes(name);
+        var nameStr = Encoding.UTF8.GetBytes(Name);
         var NAME = "world"u8;
         fixed (byte* n = nameStr)
         {
@@ -29,27 +36,19 @@ internal class HelloModule
 
                 if (r == 0)
                 {
-                    funList = Marshal.AllocHGlobal(Marshal.SizeOf<JSCFunctionListEntry>() * COUNT);
-                    var LongPtr = funList;
-                    for (int I = 0; I < COUNT; I++)
+                    var count = FunctionList.Count;
+                    if (count > 0)
                     {
-
-                        JSCFunctionListEntry entry = new JSCFunctionListEntry()
+                        PFunList = Marshal.AllocHGlobal(Marshal.SizeOf<JSCFunctionListEntry>() * count);
+                        var LongPtr = PFunList;
+                        for (int i = 0; i < count; i++)
                         {
-                            name = (byte*)Marshal.StringToHGlobalAnsi($"Add{I + 1}").ToPointer(),
-                            prop_flags = 6,
-                            def_type = 0,
-                            magic = 0,
-                        };
-                        entry.u.func.cfunc.generic = &Add;
-                        entry.u.func.length = 2;
-
-
-                        Marshal.StructureToPtr(entry, LongPtr, false);
-                        LongPtr += Marshal.SizeOf<JSCFunctionListEntry>();
+                            var entry = FunctionList[i];
+                            Marshal.StructureToPtr(entry, LongPtr, false);
+                            LongPtr += Marshal.SizeOf<JSCFunctionListEntry>();
+                        }
+                        r = JS_AddModuleExportList(context, m, (JSCFunctionListEntry*)PFunList, count);
                     }
-                    r = JS_AddModuleExportList(context, m, (JSCFunctionListEntry*)funList, COUNT);
-
                 }
 
             }
@@ -58,6 +57,9 @@ internal class HelloModule
 
         }
     }
+
+
+
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
     private unsafe static JSValue Add(JSContext* ctx, JSValue thisArg, int argc, JSValue* argv)
@@ -69,7 +71,7 @@ internal class HelloModule
         v.tag = 0;
         if (JS_ToInt32(ctx, &a, argv[0]) == 0)
         {
-            if (JS_ToInt32(ctx, &b, argv[1])== 0)
+            if (JS_ToInt32(ctx, &b, argv[1]) == 0)
             {
                 var c = a + b;
 
@@ -79,6 +81,27 @@ internal class HelloModule
         }
         return v;
     }
+
+
+    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+    private unsafe static JSValue Sub(JSContext* ctx, JSValue thisArg, int argc, JSValue* argv)
+    {
+        int a;
+        int b;
+        var v = new JSValue();
+        v.u.int32 = 0;
+        v.tag = 0;
+        if (JS_ToInt32(ctx, &a, argv[0]) == 0)
+        {
+            if (JS_ToInt32(ctx, &b, argv[1]) == 0)
+            {
+                v.u.int32 = a - b;
+            }
+
+        }
+        return v;
+    }
+
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
     static unsafe int js_hello_module_init(JSContext* ctx, JSModuleDef* m)
@@ -93,7 +116,7 @@ internal class HelloModule
                 r = JS_SetModuleExport(ctx, m, b, JS_NewString(ctx, bv));
                 if (r == 0)
                 {
-                    r = JS_SetModuleExportList(ctx, m, (JSCFunctionListEntry*)funList, COUNT);
+                    r = JS_SetModuleExportList(ctx, m, (JSCFunctionListEntry*)PFunList, FunctionList.Count);
 
                 }
             }
@@ -102,6 +125,7 @@ internal class HelloModule
 
         return r;
     }
+
 
 
 
