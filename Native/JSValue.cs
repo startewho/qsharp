@@ -26,6 +26,21 @@ namespace QuickJs
 
         private static readonly ulong JS_FLOAT64_TAG_ADDEND_BITS;
 
+        static JSValue()
+        {
+            if (IntPtr.Size == 4)
+            {
+                JS_FLOAT64_TAG_ADDEND_BITS = (unchecked((ulong)(0x7ff80000 - (int)JSTag.First + 1)) << 32); // quiet NaN encoding
+                NaN.u.uint64 = unchecked(0x7ff8000000000000UL - JS_FLOAT64_TAG_ADDEND_BITS);
+            }
+            else
+            {
+                JS_FLOAT64_TAG_ADDEND_BITS = 0UL;
+                NaN.tag = (int)JSTag.Float64;
+                NaN.u.float64 = double.NaN;
+            }
+        }
+
         /// <summary>
         /// Represents a value that is not a number.
         /// </summary>
@@ -476,6 +491,8 @@ namespace QuickJs
                 return new IntPtr(u.ptr);
             throw new InvalidCastException();
         }
+
+
 
         /// <summary>
         /// Returns the value of the specified JavaScript property
