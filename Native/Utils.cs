@@ -14,7 +14,7 @@ namespace QuickJs
         internal unsafe static byte** CreateArgv(Encoding encoding, string[] args)
         {
             int arraySize = IntPtr.Size * (args.Length + 1);
-            int memorySize = arraySize + args.Length;
+            int memorySize = arraySize + args.Length;// contion the \0 byte each arg
             foreach (string arg in args)
             {
                 memorySize += encoding.GetByteCount(arg);
