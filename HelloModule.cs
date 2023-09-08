@@ -10,29 +10,35 @@ using static QuickJs.NativeMethods;
 
 namespace QSharp;
 
-internal class HelloModule : DefaulModule
+internal class HelloModule : INativeModule
 {
-
-    private static IntPtr PFunList = IntPtr.Zero;
-
-    public unsafe static Dictionary<string, JSValue> ValueList => new Dictionary<string, JSValue>();
-
-
-
-    public unsafe static List<JSCFunctionListEntry> FunctionList => new List<JSCFunctionListEntry>() {
+    unsafe static HelloModule()
+    {
+        FunctionList = new List<JSCFunctionListEntry>()
+        {
         JSCFunctionListEntry.CreateFuction(new JSCFunctionType(){generic=&Add},nameof(Add),2),
         JSCFunctionListEntry.CreateFuction(new JSCFunctionType(){generic=&Sub},nameof(Sub),2),
-    };
-
-    
-    public static string MoudleName()
-    {
-        return "hello";
+        };
+        ValueList = new List<string>()
+        {
+            "world",
+            "world2"
+        };
     }
+
+    private unsafe static List<string> ValueList { get; }
+
+
+
+    private static List<JSCFunctionListEntry> FunctionList { get; }
+
+
+    public static string Name => "hello";
+
 
     public unsafe static JSModuleDef* Init(JSContext* context)
     {
-        return Init(context, ValueList.Keys.ToList(), &js_hello_module_init);
+        return DefaultModuleManager.Init(context, Name, FunctionList, ValueList, &js_hello_module_init);
     }
 
 
@@ -81,7 +87,7 @@ internal class HelloModule : DefaulModule
 
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
-    static unsafe int js_hello_module_init(JSContext* ctx, JSModuleDef* m)
+    public static unsafe int js_hello_module_init(JSContext* ctx, JSModuleDef* m)
     {
         var NAME = "world"u8;
         var VNAME = "helloworld"u8;
@@ -93,7 +99,11 @@ internal class HelloModule : DefaulModule
                 r = JS_SetModuleExport(ctx, m, b, JS_NewString(ctx, bv));
                 if (r == 0)
                 {
-                    r = JS_SetModuleExportList(ctx, m, (JSCFunctionListEntry*)PFunList, FunctionList.Count);
+                    if (DefaultModuleManager.ModuleList.TryGetValue(Name, out nint pFuncList))
+                    {
+                        r = JS_SetModuleExportList(ctx, m, (JSCFunctionListEntry*)pFuncList, FunctionList.Count);
+
+                    }
 
                 }
             }

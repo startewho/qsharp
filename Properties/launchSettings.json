@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "QSharp": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

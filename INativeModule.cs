@@ -14,19 +14,10 @@ namespace QSharp
     /// </summary>
     internal interface INativeModule
     {
-        abstract static IntPtr PFunList { get; set; }
         /// <summary>
-        /// Module name,used by the export
+        /// Module's Name(Key),FunList(Value) Dic
         /// </summary>
-        abstract static string MoudleName();
-      
-
-        /// <summary>
-        /// FunctionList
-        /// exprort function list
-        /// </summary>
-        abstract static List<JSCFunctionListEntry> FunctionList { get; }
-
+        abstract static string Name { get; }
 
 
     }
