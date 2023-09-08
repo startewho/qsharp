@@ -51,6 +51,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .csharp_class_accessibility("public")
         .csharp_namespace("QuickJs")
         .csharp_entry_point_prefix("csbindgen_")
+        .csharp_generate_const_filter(|x|x.starts_with("JS"))
         .generate_to_file("src/quickjs_ffi.rs", "../Native/NativeMethods.quickjs.g.cs")
         .unwrap();
     Ok(())

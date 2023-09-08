@@ -10,10 +10,10 @@ path = "src/lib.rs"
 
 
 [build-dependencies]
-csbindgen = "1.7.4"
+csbindgen = "1.8"
 cc = "1"
 bindgen = "0.64.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-csbindgen = "1.7.4"
+csbindgen = "1.8"

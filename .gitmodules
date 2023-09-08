@@ -1,3 +1,4 @@
 [submodule "quickjspp"]
-	path = quickjs/quickjspp
-	url = https://github.com/c-smile/quickjspp.git
+path = quickjs/quickjspp
+url = https://github.com/c-smile/quickjspp.git
+ignore=dirty
